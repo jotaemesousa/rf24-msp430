@@ -9,33 +9,42 @@
 
 #include "spi.h"
 
-static unsigned long ulClockMS=0;
+
+//#define CS_PIN_BASE P1OUT
+#define CS_PIN 		BIT4
+#define SIMO_PIN    BIT7
+#define SOMI_PIN    BIT6
+#define SCLK_PIN    BIT5
+
+//#define CE_PIN_BASE P1OUT
+#define CE_PIN 		BIT0
+#define CE_PORT		P2OUT
+#define CE_DIR		P2DIR
+
+
 
 void spi_init(unsigned long bitrate,unsigned long datawidth){
 	//SSI
 
-	P1OUT  |= CS_PIN;
-	P1DIR  |= CS_PIN;
+
+	UCB0CTL1 = UCSWRST;
+
+    P1DIR  |= CS_PIN;
+    P1OUT  |= CS_PIN;
+    CE_DIR |= CE_PIN;
+    CE_PORT|= CE_PIN;
 
 
-	P2SEL = 0x00;  // Make sure CSn works instead of crystal
+  	P1SEL  |= SOMI_PIN + SIMO_PIN + SCLK_PIN;
+  	P1SEL2 |= SOMI_PIN + SIMO_PIN + SCLK_PIN;
 
-	UCB0CTL1 |= UCSWRST;                      // **Disable USCI state machine**
-	UCB0CTL0 |= UCMST+UCCKPH+UCMSB+UCSYNC;    // 3-pin, 8-bit SPI master
-	UCB0CTL1 |= UCSSEL_2;                     // SMCLK
-	UCB0BR0 = 0x02;                           // UCLK/2
-	UCB0BR1 = 0;
+    // 3-pin, 8-bit SPI master
+    UCB0CTL0 |= UCCKPH + UCMSB + UCMST + UCSYNC;
+	UCB0CTL1 |= UCSSEL_2;   // SMCLK
+
+	UCB0CTL1 &= ~UCSWRST;
 
 
-	P1SEL  |= SOMI_PIN + SIMO_PIN + SCLK_PIN;
-	P1SEL2 |= SOMI_PIN + SIMO_PIN + SCLK_PIN;
-
-	P1DIR |= SIMO_PIN | SCLK_PIN;
-	                                            // SPI TXD out direction
-	UCB0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
-
-	CE_DIR |= CE_PIN;
-	spi_cs_high();
 }
 
 void spi_cs_low()
@@ -73,7 +82,7 @@ uint8_t spi_transferByte(uint8_t data)
 
 }
 
-void delay(unsigned long msec)
+/*void delay(unsigned long msec)
 {
 	while(msec--)
 	{
@@ -86,4 +95,4 @@ void delayMicroseconds(unsigned long usec)
 	{
 		__delay_cycles(1);
 	}
-}
+}*/

@@ -34,7 +34,7 @@ int main(void)
 
 	// The role of the current running sketch
 	role_e role;
-	role = role_pong_back;
+	role = role_ping_out;
 
 	cio_printf("\n\rRF24/examples/pingpair/\n\r");
 	cio_printf("ROLE: %s\n\r",role_friendly_name[role]);
@@ -88,8 +88,6 @@ int main(void)
 
 	while (1)
 	{
-		int var = 0;
-
 		//
 		// Ping out role.  Repeatedly send the current time
 		//
