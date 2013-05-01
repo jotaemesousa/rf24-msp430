@@ -19,7 +19,7 @@
 #else
 #include <Arduino.h>
 #endif
-#elif defined(MSP430)
+/*#elif defined(MSP430)
 #include <msp430.h>
 extern "C"{
 #include "conio/conio.h"
@@ -28,7 +28,7 @@ extern "C"{
 #include <stdio.h>
 #include <string.h>
 //extern HardwareSPI SPI;
-#define _BV(x) (1<<(x))
+#define _BV(x) (1<<(x))*/
 #else
 #include <stdint.h>
 #include <stdio.h>
@@ -72,7 +72,10 @@ typedef uint16_t prog_uint16_t;
 #define PRIPSTR "%s"
 
 #elif defined(MSP430)
-
+#include <msp430.h>
+extern "C"{
+#include "conio/conio.h"
+}
 //extern unsigned long int millis();
 #define PSTR(x) (x)			//ver isto
 #define strlen_P strlen
@@ -80,8 +83,7 @@ typedef uint16_t prog_uint16_t;
 #define PROGMEM
 #define pgm_read_word(p) (*(p))
 #define PRIPSTR "%s"
-
-
+typedef uint16_t prog_uint16_t;
 #else
 typedef char const char;
 typedef uint16_t prog_uint16_t;

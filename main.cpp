@@ -1,4 +1,5 @@
 #include <msp430.h>
+#include <msp430g2553.h>
 #include "rf24/RF24.h"
 #include <math.h>
 
@@ -20,7 +21,7 @@ int main(void)
 
 	__bis_SR_register(GIE);       // Enter LPM0, interrupts enabled
 
-	serial_init(9600);
+	serial_init(57600);
 
 	RF24 radio = RF24();
 	// Radio pipe addresses for the 2 nodes to communicate.

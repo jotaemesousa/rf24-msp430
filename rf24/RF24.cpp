@@ -102,7 +102,7 @@ uint8_t RF24::write_register(uint8_t reg, uint8_t value)
 {
   uint8_t status;
 
-  //IF_SERIAL_DEBUG(printf_P(PSTR("write_register(%02x,%02x)\r\n"),reg,value));
+  //IF_SERIAL_DEBUG(printf_P(PSTR("write_register(%x,%x)\r\n"),reg,value));
 
   csn(LOW);
   status = spi_transferByte( W_REGISTER | ( REGISTER_MASK & reg ) );
@@ -202,7 +202,7 @@ uint8_t RF24::get_status(void)
 
 void RF24::print_status(uint8_t status)
 {
-  printf_P(PSTR("STATUS\t\t = 0x%02x RX_DR=%x TX_DS=%x MAX_RT=%x RX_P_NO=%x TX_FULL=%x\r\n"),
+  printf_P(PSTR("STATUS\t\t = 0x%x RX_DR=%x TX_DS=%x MAX_RT=%x RX_P_NO=%x TX_FULL=%x\r\n"),
            status,
            (status & _BV(RX_DR))?1:0,
            (status & _BV(TX_DS))?1:0,
@@ -217,7 +217,7 @@ void RF24::print_status(uint8_t status)
 
 void RF24::print_observe_tx(uint8_t value)
 {
-  printf_P(PSTR("OBSERVE_TX=%02x: POLS_CNT=%x ARC_CNT=%x\r\n"),
+  printf_P(PSTR("OBSERVE_TX=%x: POLS_CNT=%x ARC_CNT=%x\r\n"),
            value,
            (value >> PLOS_CNT) & 0b1111,
            (value >> ARC_CNT) & 0b1111
@@ -231,7 +231,7 @@ void RF24::print_byte_register(const char* name, uint8_t reg, uint8_t qty)
   char extra_tab = strlen_P(name) < 8 ? '\t' : 0;
   printf_P(PSTR(PRIPSTR"\t%c ="),name,extra_tab);
   while (qty--)
-    printf_P(PSTR(" 0x%02x"),read_register(reg++));
+    printf_P(PSTR(" 0x%x"),read_register(reg++));
   printf_P(PSTR("\r\n"));
 }
 
@@ -250,7 +250,7 @@ void RF24::print_address_register(const char* name, uint8_t reg, uint8_t qty)
     printf_P(PSTR(" 0x"));
     uint8_t* bufptr = buffer + sizeof buffer;
     while( --bufptr >= buffer )
-      printf_P(PSTR("%02x"),*bufptr);
+      printf_P(PSTR("%x"),*bufptr);
   }
 
   printf_P(PSTR("\r\n"));
